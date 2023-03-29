@@ -1,8 +1,8 @@
 import './style.css'
 
 (function () {
-  setGrid(4,4);
-  handleGifs();
+  //handleGifs();
+  handleMenu();
 })();
 
 
@@ -52,23 +52,25 @@ function handleGifs() {
     results.forEach(result => results.push(result));
     let shuffledResults = shuffle(results);
     console.log(shuffledResults);
+    setGrid(4,4);
     loadGifs(shuffledResults);
     matchAGif();
   }).catch((err) => console.log(err));  
 
-}
-
-function loadGifs(gifsArray) {
-  const cells = document.querySelectorAll(".grid-cell");
-
-  for (let i = 0; i < gifsArray.length; i++) {
-    const img = document.createElement("img");
-    img.src = gifsArray[i].url;
-    img.id = gifsArray[i].id;
-    cells[i].appendChild(img);
-    img.classList.add("hide-gif");
+  function loadGifs(gifsArray) {
+    const cells = document.querySelectorAll(".grid-cell");
+  
+    for (let i = 0; i < gifsArray.length; i++) {
+      const img = document.createElement("img");
+      img.src = gifsArray[i].url;
+      img.id = gifsArray[i].id;
+      cells[i].appendChild(img);
+      img.classList.add("hide-gif");
+    }
   }
 }
+
+
 
 
 // Will handle our game logic
@@ -144,6 +146,18 @@ function shuffle(array) {
   }
 
   return array;
+}
+
+function handleMenu() {
+  const playBtn = document.querySelector("#play");
+
+  playBtn.addEventListener("click", handlePlay);
+
+  function handlePlay() {
+    const menu = document.querySelector(".menu");
+    menu.remove();
+    handleGifs();
+  }
 }
 
 
