@@ -3,6 +3,7 @@
   --grid-rows: 1;
 
   --bittersweet-shimmer: #C83E4D;
+  --pale-dogwood: #F4D6CC;
   
   background: #32373B;
   font-family: 'Anton', sans-serif;
@@ -46,6 +47,10 @@ body {
   min-height: 100vh;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* A elements that don't have a class get default styles */
@@ -69,12 +74,32 @@ select {
   font: inherit;
 }
 
+/********OVERLAY**********/
+.overlay-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0,0,0, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+.show-overlay {
+  display: flex;
+}
+
+h1#game-over {
+  font-size: 4rem;
+  color: var(--pale-dogwood);
+}
 /********HEADER**********/
-.header-container {
+/* .header-container {
   display: flex;
   justify-content: center;
   
-}
+} */
 
 #title {
   color: var(--bittersweet-shimmer);
@@ -82,15 +107,15 @@ select {
 }
 
 /********MAIN**********/
-.content-container {
+/* .content-container {
   display: flex;
   justify-content: center;
-}
+} */
 
 .grid {
   display: grid;
-  grid-template-rows: repeat(var(--grid-rows), 8rem);
-  grid-template-columns: repeat(var(--grid-cols), 8rem);
+  grid-template-rows: repeat(var(--grid-rows), 10rem);
+  grid-template-columns: repeat(var(--grid-cols), 10rem);
   border: 1px solid black;
   background-color: white;
 }
@@ -108,6 +133,19 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.hide-gif {
+  display: none;
+}
+
+/********FOOTER**********/
+h4#footer, a#git-link {
+  color: var(--bittersweet-shimmer);
+}
+
+a#git-link {
+  text-decoration: none;
 }
 
 /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */

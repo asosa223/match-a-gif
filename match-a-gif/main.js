@@ -53,7 +53,7 @@ function handleGifs() {
     let shuffledResults = shuffle(results);
     console.log(shuffledResults);
     loadGifs(shuffledResults);
-    matchAGif(shuffledResults);
+    matchAGif();
   }).catch((err) => console.log(err));  
 
 }
@@ -66,7 +66,7 @@ function loadGifs(gifsArray) {
     img.src = gifsArray[i].url;
     img.id = gifsArray[i].id;
     cells[i].appendChild(img);
-    img.style.display = "none";
+    img.classList.add("hide-gif");
   }
 }
 
@@ -75,41 +75,54 @@ function loadGifs(gifsArray) {
 function matchAGif() {
   const cells = document.querySelectorAll(".grid-cell");
   let cellOne, cellTwo;
+  let matches = 0;
 
   cells.forEach(cell => {
-    cell.addEventListener("click", (e)=>{
-      let clickedCell = e.target;
+    cell.addEventListener("click", handleClick);
+  })
 
-      if (clickedCell !== cellOne) {
-        clickedCell.querySelector("img").style.display = "";
+  function handleClick(e) {
+    let clickedCell = e.target;
 
-        if (!cellOne) {
-          return cellOne = clickedCell;
-        }
-        
-        cellTwo = clickedCell;
-        // console.log(cellOne, cellTwo);
-        let cellOneGif = cellOne.querySelector("img"),
-        cellTwoGif = cellTwo.querySelector("img");
-        
-        compareGifs(cellOneGif, cellTwoGif);
+    if (clickedCell !== cellOne) {
+      clickedCell.querySelector("img").classList.remove("hide-gif");
+
+      if (!cellOne) {
+        return cellOne = clickedCell;
       }
       
-    })
-  })
+      cellTwo = clickedCell;
+  
+      let cellOneGif = cellOne.querySelector("img"),
+      cellTwoGif = cellTwo.querySelector("img");
+      
+      compareGifs(cellOneGif, cellTwoGif);
+    }
+  }
 
   function compareGifs(gifOne, gifTwo) {
     if (gifOne.id === gifTwo.id) {
+      matches++;
       console.log("Match!");
+      if (matches === 8) {
+        handleGameOver();
+      }
+      cellOne.removeEventListener("click", handleClick);
+      cellTwo.removeEventListener("click", handleClick);
       cellOne = cellTwo = '';
     } else {
       console.log("No Match.");
-      setTimeout(() => { // if two card not matched
-        gifOne.style.display = 'none';
-        gifTwo.style.display = 'none';
+      setTimeout(() => { 
+        gifOne.classList.add("hide-gif");
+        gifTwo.classList.add("hide-gif");
     }, 800);
       cellOne = cellTwo = '';
     }
+  }
+
+  function handleGameOver() {
+    const overlay = document.querySelector(".overlay-container");
+    overlay.classList.add("show-overlay");
   }
 }
 
@@ -147,8 +160,3 @@ function shuffle(array) {
  * * adding a timer against the player
  * * * if the timer runs out, the game is lost
  */
-
-// When click grid cell, return img id
-// Then we want to click another grid cell
-// When that grid cell is clicked, compare current grid cell's id with other clicked cell
-// if those id's match, stay displayed else both displays are set to none
