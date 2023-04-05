@@ -3,8 +3,9 @@
   --grid-rows: 1;
 
   --bittersweet-shimmer: #C83E4D;
-  --pale-dogwood: #F4D6CC;
+  --naples-yellow: #F9DC5C;
   --Onyx: #32373B;
+  --mint-cream: #F4FFFD;
   
   background: var(--Onyx);
   font-family: 'Anton', sans-serif;
@@ -100,16 +101,27 @@ header, main, footer {
 
 .show-overlay {
   display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 h1#game-over {
   font-size: 4rem;
-  color: var(--pale-dogwood);
+  color: var(--naples-yellow);
+}
+
+button#restart {
+  font-size: 2rem;
+  color: var(--naples-yellow);
+  background-color: var(--Onyx);
+  border: 2px solid var(--naples-yellow);
+  padding: 0rem 1rem 0rem 1rem;
+  cursor: pointer;
 }
 /********HEADER**********/
 #title {
   color: var(--bittersweet-shimmer);
-  font-size: 4rem;
+  font-size: 5rem;
 }
 
 /********MAIN**********/
@@ -122,13 +134,18 @@ h1#game-over {
   width: inherit;
 }
 
+.menu-error {
+  color: var(--naples-yellow);
+  font-size: 1rem;
+}
+
 .difficulty-buttons{
   display: flex;
   gap: 1rem;
 }
 
 .difficulty-buttons > button, .play-button > button {
-  font-size: 2rem;
+  font-size: 3rem;
   color: var(--bittersweet-shimmer);
   background-color: var(--Onyx);
   border: 2px solid var(--bittersweet-shimmer);
@@ -160,6 +177,8 @@ h1#game-over {
 .grid-cell {
   text-align: center;
   border: 1px solid black;
+  cursor: pointer;
+  background-color: var(--mint-cream);
 }
 
 /* .grid-cell:hover {
@@ -177,8 +196,12 @@ img {
 }
 
 /********FOOTER**********/
-h4#footer, a#git-link {
+h4#footer {
   color: var(--bittersweet-shimmer);
+}
+
+a#git-link {
+  color: var(--naples-yellow);
 }
 
 a#git-link {

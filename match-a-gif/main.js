@@ -9,12 +9,13 @@ import './style.css'
 function setGrid(rows, cols){
   const content = document.querySelector(".content-container");
   const grid = document.createElement("div");
+
   grid.classList.add("grid");
   grid.style.setProperty("--grid-rows", rows);
   grid.style.setProperty("--grid-cols", cols);
 
   for (let i = 0; i < (rows * cols); i++) {
-    let cell = document.createElement("div")
+    let cell = document.createElement("div");
     grid.appendChild(cell).className = "grid-cell";
   }
 
@@ -112,6 +113,8 @@ function matchAGif(pairs) {
       }
       cellOne.removeEventListener("click", handleClick);
       cellTwo.removeEventListener("click", handleClick);
+      cellOne.style.cursor = "not-allowed";
+      cellTwo.style.cursor = "not-allowed";
       cellOne = cellTwo = '';
     } else {
       console.log("No Match.");
@@ -125,7 +128,12 @@ function matchAGif(pairs) {
 
   function handleGameOver() {
     const overlay = document.querySelector(".overlay-container");
+    const restart = overlay.querySelector("#restart");
     overlay.classList.add("show-overlay");
+
+    restart.addEventListener("click", () => {
+      window.location.reload();
+    })
   }
 }
 
@@ -177,8 +185,16 @@ function handleMenu() {
   }
 
   function handlePlay() {
+    const error = document.createElement("div");
+    error.classList.add("menu-error");
+
     if (gridSize === undefined) {
       console.log("Please select Difficulty");
+      error.textContent = "Please select Difficulty";
+      menu.appendChild(error);
+      setTimeout(() => {
+        error.remove();
+      }, 3000);
     } else {
       menu.remove();
       handleGifs(gridSize);
@@ -203,4 +219,5 @@ function handleMenu() {
  * Things to add to game:
  * * adding a timer against the player
  * * * if the timer runs out, the game is lost
+ * * 
  */
