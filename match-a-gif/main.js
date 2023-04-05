@@ -40,10 +40,11 @@ async function getGif() {
   }
 }
 
-function handleGifs() {
+function handleGifs(gridSize) {
   let promises = [];
+  let pairs = gridSize * gridSize / 2;
 
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < pairs; i++) {
     promises.push(getGif());
   }
 
@@ -52,9 +53,9 @@ function handleGifs() {
     results.forEach(result => results.push(result));
     let shuffledResults = shuffle(results);
     console.log(shuffledResults);
-    setGrid(4,4);
+    setGrid(gridSize, gridSize);
     loadGifs(shuffledResults);
-    matchAGif();
+    matchAGif(pairs);
   }).catch((err) => console.log(err));  
 
   function loadGifs(gifsArray) {
@@ -74,7 +75,7 @@ function handleGifs() {
 
 
 // Will handle our game logic
-function matchAGif() {
+function matchAGif(pairs) {
   const cells = document.querySelectorAll(".grid-cell");
   let cellOne, cellTwo;
   let matches = 0;
@@ -106,7 +107,7 @@ function matchAGif() {
     if (gifOne.id === gifTwo.id) {
       matches++;
       console.log("Match!");
-      if (matches === 8) {
+      if (matches === pairs) {
         handleGameOver();
       }
       cellOne.removeEventListener("click", handleClick);
@@ -149,15 +150,44 @@ function shuffle(array) {
 }
 
 function handleMenu() {
-  const playBtn = document.querySelector("#play");
+  const menu = document.querySelector(".menu");
+  const play = menu.querySelector("#play");
+  const easy = menu.querySelector("#easy");
+  const hard = menu.querySelector("#hard");
+  let gridSize;
 
-  playBtn.addEventListener("click", handlePlay);
+  function handleDifficulty(e) {
+    let difficulty = e.target;
+
+    if (difficulty === easy) {
+      gridSize = 4;
+      difficulty.classList.add("clicked");
+      if (hard.classList.contains("clicked")) {
+        hard.classList.remove("clicked");
+      }
+    } else if (difficulty === hard) {
+      gridSize = 6;
+      difficulty.classList.add("clicked");
+      if (easy.classList.contains("clicked")) {
+        easy.classList.remove("clicked");
+      }
+    }
+
+    console.log(gridSize);
+  }
 
   function handlePlay() {
-    const menu = document.querySelector(".menu");
-    menu.remove();
-    handleGifs();
+    if (gridSize === undefined) {
+      console.log("Please select Difficulty");
+    } else {
+      menu.remove();
+      handleGifs(gridSize);
+    }
   }
+
+  easy.addEventListener("click", handleDifficulty);
+  hard.addEventListener("click", handleDifficulty);
+  play.addEventListener("click", handlePlay);
 }
 
 

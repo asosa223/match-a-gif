@@ -141,6 +141,13 @@ h1#game-over {
   border: 2px solid var(--bittersweet-shimmer);
   cursor: pointer;
 }
+
+.difficulty-buttons > button.clicked {
+  color: white;
+  background-color: var(--bittersweet-shimmer);
+  border: 2px solid var(--bittersweet-shimmer);
+  cursor: pointer;
+}
 /****GIF GRID****/
 .grid {
   display: grid;
