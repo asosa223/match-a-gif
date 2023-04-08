@@ -134,6 +134,41 @@ button#restart {
   width: inherit;
 }
 
+.menu-input {
+  display: flex;
+}
+
+input#gif-category {
+  width: 30rem;
+  font-size: 2rem;
+  padding: .2rem 2rem .2rem 1rem;
+  background-color: var(--onyx);
+  border: 2px solid var(--bittersweet-shimmer);
+  border-right: none;
+  color: var(--bittersweet-shimmer);
+}
+
+input#gif-category:focus {
+  outline: none;
+}
+
+#category-submit {
+  color: var(--bittersweet-shimmer);
+  background-color: var(--Onyx);
+  border: 2px solid var(--bittersweet-shimmer);
+  border-left: none;
+  cursor: pointer;
+}
+
+.display-category {
+  color: var(--naples-yellow);
+  font-size: 2rem;
+}
+
+.display-category > span {
+  color: var(--bittersweet-shimmer);
+}
+
 .menu-error {
   color: var(--naples-yellow);
   font-size: 1rem;

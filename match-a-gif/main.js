@@ -1,11 +1,10 @@
 import './style.css'
 
 (function () {
-  //handleGifs();
   handleMenu();
 })();
 
-
+// Sets up our grid to hold gifs
 function setGrid(rows, cols){
   const content = document.querySelector(".content-container");
   const grid = document.createElement("div");
@@ -22,12 +21,12 @@ function setGrid(rows, cols){
   content.appendChild(grid); 
 }
 
-
-async function getGif() {
+// Fetch our gif from Giphy API 
+async function getGif(tag) {
   const apiKey = "cuXoEQWW553PdfThfH0fdMWkbEkVlRcq";
 
   try {
-    const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=dogs`, 
+    const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=${tag}`, 
     {mode : "cors",});
     const gifData = await response.json();
     const gifUrl = gifData.data.images.fixed_height.url;
@@ -37,28 +36,29 @@ async function getGif() {
       id: gifID
     };
   } catch {
-      console.log("error");
+      console.log("error loading gifs");
   }
 }
 
-function handleGifs(gridSize) {
+// Handles getting and loading gifs
+function handleGifs(gridSize, gifTag) {
   let promises = [];
   let pairs = gridSize * gridSize / 2;
 
   for (let i = 0; i < pairs; i++) {
-    promises.push(getGif());
+    promises.push(getGif(gifTag));
   }
 
   Promise.all(promises).
   then((results) => {
     results.forEach(result => results.push(result));
     let shuffledResults = shuffle(results);
-    console.log(shuffledResults);
     setGrid(gridSize, gridSize);
     loadGifs(shuffledResults);
     matchAGif(pairs);
   }).catch((err) => console.log(err));  
 
+  // Loads gifs onto our grid
   function loadGifs(gifsArray) {
     const cells = document.querySelectorAll(".grid-cell");
   
@@ -85,6 +85,7 @@ function matchAGif(pairs) {
     cell.addEventListener("click", handleClick);
   })
 
+  // Handles user clicking grid cells
   function handleClick(e) {
     let clickedCell = e.target;
 
@@ -104,10 +105,10 @@ function matchAGif(pairs) {
     }
   }
 
+  // Compares clicked gifs to see if they match
   function compareGifs(gifOne, gifTwo) {
     if (gifOne.id === gifTwo.id) {
       matches++;
-      console.log("Match!");
       if (matches === pairs) {
         handleGameOver();
       }
@@ -117,7 +118,6 @@ function matchAGif(pairs) {
       cellTwo.style.cursor = "not-allowed";
       cellOne = cellTwo = '';
     } else {
-      console.log("No Match.");
       setTimeout(() => { 
         gifOne.classList.add("hide-gif");
         gifTwo.classList.add("hide-gif");
@@ -126,6 +126,7 @@ function matchAGif(pairs) {
     }
   }
 
+  // Handles the game over screen and reset
   function handleGameOver() {
     const overlay = document.querySelector(".overlay-container");
     const restart = overlay.querySelector("#restart");
@@ -138,7 +139,7 @@ function matchAGif(pairs) {
 }
 
 
-
+// Shuffles a passed in array
 function shuffle(array) {
   let m = array.length, t, i;
 
@@ -157,13 +158,29 @@ function shuffle(array) {
   return array;
 }
 
+// Handle our game menu
 function handleMenu() {
   const menu = document.querySelector(".menu");
+  let categoryForm = menu.querySelector(".menu-input");
+  const category = document.createElement("div");
+  category.classList.add("display-category");
   const play = menu.querySelector("#play");
   const easy = menu.querySelector("#easy");
   const hard = menu.querySelector("#hard");
-  let gridSize;
+  let gridSize, gifCategory;
 
+  // User can input category of gifs
+  categoryForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let categoryInput = menu.querySelector("#gif-category");
+
+    gifCategory = categoryInput.value;
+    categoryInput.value = "";
+    category.innerHTML = `<span>Category: </span>${gifCategory}`
+    menu.appendChild(category);
+  })
+  
+  // User will select easy or hard
   function handleDifficulty(e) {
     let difficulty = e.target;
 
@@ -180,24 +197,28 @@ function handleMenu() {
         easy.classList.remove("clicked");
       }
     }
-
-    console.log(gridSize);
   }
 
+  // Handles play functionality
   function handlePlay() {
     const error = document.createElement("div");
     error.classList.add("menu-error");
 
-    if (gridSize === undefined) {
-      console.log("Please select Difficulty");
-      error.textContent = "Please select Difficulty";
+    if (gridSize == undefined) {
+      error.textContent = "Please Select Difficulty";
       menu.appendChild(error);
       setTimeout(() => {
         error.remove();
       }, 3000);
+    } else if (gifCategory == undefined) {
+        error.textContent = "Please Input Category";
+        menu.appendChild(error);
+        setTimeout(() => {
+          error.remove();
+        }, 3000);
     } else {
-      menu.remove();
-      handleGifs(gridSize);
+        menu.remove();
+        handleGifs(gridSize, gifCategory);
     }
   }
 
@@ -205,19 +226,3 @@ function handleMenu() {
   hard.addEventListener("click", handleDifficulty);
   play.addEventListener("click", handlePlay);
 }
-
-
-// Gif match Game
-/**Game will start with a X by X grid of boxes with hidden gif values
- * * Player will choose a box and a gif will be revealed
- * * * When player clicks cell, reveal loaded gif
- * * Player will then choose another box and another gif will be revealed
- * * if both gifs match, then they will stay revealed on the grid
- * * if they do not match, then both gifs will be hidden again
- * * once all gifs have been revealed, game is complete and the player wins
- * 
- * Things to add to game:
- * * adding a timer against the player
- * * * if the timer runs out, the game is lost
- * * 
- */
