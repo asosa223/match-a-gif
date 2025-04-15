@@ -23,7 +23,7 @@ function setGrid(rows, cols){
 
 // Fetch our gif from Giphy API 
 async function getGif(tag) {
-  const apiKey = "cuXoEQWW553PdfThfH0fdMWkbEkVlRcq";
+  const apiKey = import.meta.env.VITE_MATCH_GAME_API_KEY;
 
   try {
     const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=${tag}`, 
